@@ -20,6 +20,11 @@ object XMLHttpRequestFuture {
     val json = "json"
     val text = "text" //DOMString
   }
+
+  object statusCodes {
+    val SC_OK = 200
+    val SC_NOT_FOUND = 404
+  }
 }
 
 
