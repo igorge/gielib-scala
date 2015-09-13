@@ -4,9 +4,7 @@ PROJECT_ROOT="."
 
 sbtpublish_impl(){
   echo ">>>>>>>>>>>>>" $1
-  sbt clean
-  sbt publish-local
-  sbt clean
+  sbt clean test publish-local clean
 }
 
 sbtpublish(){
