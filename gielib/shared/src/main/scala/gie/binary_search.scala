@@ -5,8 +5,10 @@ import scala.collection.Searching.{Found, InsertionPoint, SearchResult}
 
 object search {
 
+  @inline def binarySearch[A, B](key: A, data: IndexedSeq[B])(compare: (A,B)=>Int): SearchResult = binarySearch(key, data, 0, data.size)(compare)
+
   @tailrec
-  private def binarySearch[A, B](key: A, data: IndexedSeq[B], from: Int, to: Int)(compare: (A,B)=>Int): SearchResult = {
+  def binarySearch[A, B](key: A, data: IndexedSeq[B], from: Int, to: Int)(compare: (A,B)=>Int): SearchResult = {
     if (to == from) InsertionPoint(from) else {
       val idx = from+(to-from-1)/2
       (math.signum(compare(key, data(idx))): @switch) match {
