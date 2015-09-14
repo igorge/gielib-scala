@@ -15,6 +15,35 @@ object sorted_merge {
     out
   }
 
+
+  @inline
+  def mergedForeachOptSeq[T](s1: IndexedSeq[T], s2: IndexedSeq[T])
+                      (cmp: (T,T)=>Int)
+                      (outEq: (T,T)=>Unit)(outS1: T=>Unit)(outS2: T=>Unit): Unit =
+  {
+    if(s1 eq null) {
+      if(s2 ne null){
+        val s2_size = s2.size
+        var i = 0
+        while (i!=s2_size){
+          outS2(s2(i))
+          i+=1
+        }
+      }
+    } else if(s2 eq null) {
+        val s1_size = s1.size
+        var i = 0
+        while (i!=s1_size){
+          outS1(s1(i))
+          i+=1
+        }
+    } else {
+      mergedForeach(s1,s2)(cmp)(outEq)(outS1)(outS2)
+    }
+
+  }
+
+
   def mergedForeach[T](s1: IndexedSeq[T], s2: IndexedSeq[T])
                       (cmp: (T,T)=>Int)
                       (outEq: (T,T)=>Unit)(outS1: T=>Unit)(outS2: T=>Unit): Unit =
