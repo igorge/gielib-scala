@@ -5,13 +5,19 @@ import scala.collection.generic.Growable
 
 object sorted_merge {
 
-  def merge[
-      T,
-      S1 <% IndexedSeq[T],
-      S2 <% IndexedSeq[T],
-      SR <% Growable[T]  ]
-  (s1: S1, s2: S2, out:SR)
-  (cmp: (T,T)=>Int)(onEq: (T,T)=>T): SR =
+
+  @inline
+  def merge[T](s1: IndexedSeq[T], s2: IndexedSeq[T], out:Growable[T])
+              (cmp: (T,T)=>Int)
+              (eqMap: (T,T)=>T): out.type =
+  {
+    mergedForeach(s1, s2)(cmp){ (l,r)=>out+=eqMap(l,r) }(l=>out+=l)(r=>out+=r)
+    out
+  }
+
+  def mergedForeach[T](s1: IndexedSeq[T], s2: IndexedSeq[T])
+                      (cmp: (T,T)=>Int)
+                      (outEq: (T,T)=>Unit)(outS1: T=>Unit)(outS2: T=>Unit): Unit =
   {
     val s1_size = s1.size
     val s2_size = s2.size
@@ -22,13 +28,13 @@ object sorted_merge {
     while (s1_i!=s1_size && s2_i!=s2_size){
       (math.signum(cmp(s1(s1_i), s2(s2_i))): @switch) match {
         case -1 =>
-          out += s1(s1_i)
+          outS1( s1(s1_i) )
           s1_i += 1
         case  1 =>
-          out += s2(s2_i)
+          outS2( s2(s2_i) )
           s2_i += 1
         case  _ =>
-          out += onEq( s1(s1_i), s2(s2_i) )
+          outEq( s1(s1_i), s2(s2_i) )
           s1_i += 1
           s2_i += 1
       }
@@ -37,18 +43,16 @@ object sorted_merge {
     // copy tail
     if(s1_i!=s1_size){
       while (s1_i!=s1_size) {
-        out += s1(s1_i)
+        outS1( s1(s1_i) )
         s1_i += 1
       }
     } else { // s1_i==s1_size && s2_i!=s2_size
       while (s2_i!=s2_size) {
-        out += s2(s2_i)
+        outS2( s2(s2_i) )
         s2_i += 1
       }
 
     }
-
-    out
   }
-
+  
 }
