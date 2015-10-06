@@ -4,6 +4,7 @@ package gie.jsutils
 import scala.scalajs.js
 
 
+@js.native
 object Require extends js.GlobalScope {
    def require(v: String): js.Dynamic = js.native
 }
