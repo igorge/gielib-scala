@@ -12,7 +12,7 @@ lazy val gielib = crossProject.in(file(".")).
     organization := "gie",
     name := "gielib-scodec",
     version := "0.1-SNAPSHOT",
-    scalaVersion := "2.11.7",
+    scalaVersion := "2.11.8",
     scalacOptions := Seq("-optimise", "-Xlint", "-unchecked", "-deprecation", "-encoding", "utf8"),
     libraryDependencies += "org.scodec" %%% "scodec-core" % "1.8.1"
   ).
