@@ -15,5 +15,7 @@ sbtpublish "gielib"
 
 sbtpublish "gielib-scodec"
 
+sbtpublish "gielib-javafx"
+
 
 
